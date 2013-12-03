@@ -1,0 +1,11 @@
+#docDisplay{padding: 20px;
+	background-color: #FFFFFF;}
+.mentionStyle{font-size: 14px;
+	font-weight: bold;
+	opacity: 1;}	
+.textStyle{font-size: 12px;}
+.inactive{opacity: 0.3;
+	font-size: 12px;}
+.selected {background-color: #EEEEEE;}
+.guess {border: 1px solid black;}
+.incorrect {border-bottom: 1px solid red;}
