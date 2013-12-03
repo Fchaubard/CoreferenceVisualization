@@ -9,3 +9,4 @@
 .selected {background-color: #EEEEEE;}
 .guess {border: 1px solid black;}
 .incorrect {border-bottom: 1px solid red;}
+#key{padding: 10px;}
