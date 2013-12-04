@@ -10,8 +10,8 @@ body{font-family: sans-serif;
 	cursor: pointer;}	
 .textStyle{font-size: 16px;}
 .inactive{opacity: 0.3;}
-.guess {background-color: #EEEEEE;}
-.guess.selected {background-color: #DDDDDD;}
+.guess {background-color: #DDDDDD;}
+.guess.selected {background-color: #CCCCCC;}
 .incorrect {border-bottom: 2px solid red;}
 #key{padding: 20px;}
 .on.exterior{
