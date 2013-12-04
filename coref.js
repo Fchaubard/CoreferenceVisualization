@@ -11,10 +11,12 @@ var contentJSON = {"mentionEnd":[7,11,21,25,31,31,37,41,45,51,51,54,56,61,63,75,
 //CODE STARTS HERE
 var colorIdx=0;
 var colorMap = [];
-var colors =["#1f77b4", "#ff7f0e", "#aec7e8", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5", "#8c564b", "#c49c94", "#e377c2", "#f7b6d2", "#7f7f7f", "#c7c7c7", "#bcbd22", "#dbdb8d", "#17becf", "#9edae5"];
+//var colors =["#1f77b4", "#ff7f0e", "#aec7e8", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5", "#8c564b", "#c49c94", "#e377c2", "#f7b6d2", "#7f7f7f", "#c7c7c7", "#bcbd22", "#dbdb8d", "#17becf", "#9edae5"];
+var colors = ["#A6CEE3","#1F78B4","#B2DF8A","#33A02C","#FB9A99","#E31A1C","#FDBF6F","#FF7F00","#CAB2D6","#6A3D9A","#FFFF99"];
 var currentMentionId = -1;
 var mentionSpans=[];
 var currentContent;
+var interiorMentionClick = false;
 
 //Return a color from the colors array for the given clusterId
 function getColor(clusterId){
@@ -26,105 +28,153 @@ function getColor(clusterId){
 	return colorMap[clusterId];
 }
 
-//Display data from the content object
-function display(content) {
-	currentContent = content;
-	//Clear the doc div
-	$( "#docDisplay" ).text("");
-	//Add the document text
-	var i=0;
-	while (i < content.string.length){
-		var mIdx = $.inArray(i,content.mentionStart);
-		//If string is part of a mention
-		if (mIdx >= 0){
-			mentionSpans[mIdx] = $(document.createElement('span'))
+//Build a mention span
+function getMentionSpan(mIdx){
+
+	var span =  $(document.createElement('span'))
 				.addClass( "mention" )
 				.addClass( "mentionStyle" )
+				.addClass( "gold"+currentContent.gold[mIdx] )
+				.addClass( "guess"+currentContent.guess[mIdx] )
 				.attr("id","m"+mIdx)
-				.css("color",getColor(content.gold[mIdx]));
-			$( "#docDisplay" ).append(mentionSpans[mIdx]);
-			while (i < content.mentionEnd[mIdx]){
-				mentionSpans[mIdx].append(content.string[i] + " ");
-				i++;
+				.css("color",getColor(currentContent.gold[mIdx]));
+	//mark incorrect
+	if (currentContent.gold[mIdx] != currentContent.guess[mIdx])
+		span.addClass("incorrect");
+	return span;
+}
+
+function getIntersect(arr1,arr2) {
+	var temp = new Array();
+	for(var i = 0; i < arr1.length; i++){
+		for(var k = 0; k < arr2.length; k++){
+			if(arr1[i] == arr2[k]){
+				temp[temp.length] = arr1[i];
 			}
-			//If guess cluster is incorrect
-			if (content.gold[mIdx] != content.guess[mIdx]){
-				mentionSpans[mIdx].addClass( "incorrect" );
+		}
+	}
+	return temp;
+}
+
+function clusterIndexArray(array){
+	var idxArray = new Array();
+	for (var i=0;i<array.length;i++){
+		if (!idxArray[array[i]]){
+			var id = array[i];
+			//Build an array of the indices of the gold cluster
+			idxArray[id] = new Array();
+			idxArray[id][0] = jQuery.inArray(id,array);
+			while (jQuery.inArray(id,array,idxArray[id][idxArray[id].length-1]+1)!=-1){
+				idxArray[id].push(jQuery.inArray(id,array,idxArray[id][idxArray[id].length-1]+1));
 			}
-		} else {
-			//Add the plain text
-			$( "#docDisplay" ).append(
-				$(document.createElement('span'))
-				.addClass( "textStyle" )
-				.append(content.string[i] + " "));
-			i++;
+		}
+	}
+	return idxArray;
+}
+
+function updateEntityIds(){
+	//For each gold cluster find the max overlap (greedy)
+	var goldToGuessMap = [];
+	//For each gold cluster build an array of its indices
+	var goldIdxArray = clusterIndexArray(currentContent.gold);
+	//For each guess cluster build an array of its indices
+	var guessIdxArray = clusterIndexArray(currentContent.guess);
+	//Build an array of the indices of the
+	//Find maximum overlap for each cluster
+	for (var i=0;i<goldIdxArray.length;i++){
+		if (goldIdxArray[i]){
+			var overlap=0;
+			var guessClusterId=-1;
+			for (var j=0;j<guessIdxArray.length;j++){
+				if (guessIdxArray[j]){
+					//Get overlap
+					var curr = getIntersect(goldIdxArray[i],guessIdxArray[j]).length;
+					if (curr > overlap){
+						overlap = curr;
+						guessClusterId = currentContent.guess[guessIdxArray[j][0]];
+					}
+				}
+			}
+			//Update all entity ids for given cluster
+			if (guessClusterId>=0) {
+				for (var j=0;j<currentContent.guess.length;j++){
+					currentContent.guess[j] = (currentContent.guess[j] == guessClusterId) ? currentContent.gold[goldIdxArray[i][0]] : currentContent.guess[j];
+				}
+			}
 		}
 	}
 }
 
+//Display data from the content object
+function display(content) {
+	currentContent = content;
+	updateEntityIds();
+	//Clear the doc div
+	$( "#docDisplay" ).text("");
+	var idx=0;	
+	for (var i=0;i<content.mentionStart.length;i++){
+		//Add text in front of mention
+		$( "#docDisplay" ).append($(document.createElement('span'))
+			.addClass( "textStyle" )
+			.append(content.string.slice(idx,content.mentionStart[i]).join(" "))).append(" ");
+		idx = content.mentionStart[i];
+		//Add mention
+		mentionSpans[i] = getMentionSpan(i);
+		$( "#docDisplay" ).append(mentionSpans[i]);
+		//Check for interior mentions
+		while (i < content.gold.length-1 && content.mentionEnd[i+1]<=content.mentionEnd[i]){
+			mentionSpans[i].append(content.string.slice(idx,content.mentionStart[i+1]).join(" ")).append(" ");
+			mentionSpans[i+1]=getMentionSpan(i+1);
+			mentionSpans[i].append(mentionSpans[i+1]);
+			//Mark as interior/exterior mention
+			mentionSpans[i].addClass("exterior");
+			mentionSpans[i+1].addClass("interior");
+			i++;
+			idx = content.mentionStart[i];
+		}
+		//Finish building mention
+		mentionSpans[i].append(content.string.slice(idx,content.mentionEnd[i]).join(" ")).append(" ");
+		idx = content.mentionEnd[i];
+	}
+}
+
+//Toggle on/off mentions
 function toggleMention(mention){
 	var mIdx = parseInt(mention.id.substring(1));
-	//Same mention was selected, toggle off
+	if ($( "#m"+mIdx ).hasClass("interior")){
+		interiorMentionClick = true;
+		$( ".exterior" ).addClass("on");
+	} else if (interiorMentionClick){
+		interiorMentionClick = false;
+		return;
+	} else {
+		$( ".exterior" ).removeClass("on");
+	}
+	//Same mention was selected, reset display
 	if (mIdx == currentMentionId){
 		$( ".mention" ).removeClass("guess")
 			.removeClass("inactive")
+			.removeClass("guess")
 			.removeClass("selected")
 			.addClass("mentionStyle");
 		currentMentionId = -1;
 		$( ".textStyle" ).removeClass("inactive");
 		return;
 	} else {
+		//Set mention to selected, make all mentions inactive
 		$( "#m"+mIdx ).addClass( "selected" );
 		$( ":not(#m"+mIdx+")" ).removeClass( "selected" );
 		$( ".textStyle" ).addClass("inactive");
-		$( ".mention" ).addClass("inactive");
+		$( ".mention" ).addClass("inactive")
+					.removeClass("guess");
 		currentMentionId = mIdx;
 	}
-	for (var i=0; i < mentionSpans.length; i++){
-		mentionSpans[i];
-		if (currentContent.gold[i] != currentContent.gold[mIdx] && 
-			currentContent.guess[i] != currentContent.guess[mIdx]){
-			mentionSpans[i].removeClass( "mentionStyle" )
-				.removeClass("guess")
-				.addClass("inactive");
-		} else {
-			mentionSpans[i].removeClass("inactive")
+	//Mark gold clusters
+	$( ".gold"+currentContent.gold[mIdx]).removeClass( "inactive" )
 				.addClass("mentionStyle");
-			if (currentContent.guess[i] == currentContent.guess[mIdx]){
-				mentionSpans[i].addClass("guess");
-			}
-		}
-	}
-}
-
-function unhoverMention(mention){
-	$( ".mention" ).removeClass("guess")
-		.removeClass("inactive")
-		.removeClass("selected")
-		.addClass("mentionStyle");
-	currentMentionId = -1;
-	$( ".textStyle" ).removeClass("inactive");
-}
-
-function hoverMention(mention){
-	var mIdx = parseInt(mention.id.substring(1));
-	$( "#m"+mIdx ).addClass( "selected" );
-	$( ":not(#m"+mIdx+")" ).removeClass( "selected" );
-	$( ".textStyle" ).addClass("inactive");
-	for (var i=0; i < mentionSpans.length; i++){
-		if (currentContent.gold[i] != currentContent.gold[mIdx] && 
-			currentContent.guess[i] != currentContent.guess[mIdx]){
-			mentionSpans[i].removeClass("mentionStyle")
-				.removeClass("guess")
-				.addClass("inactive")
-		} else {
-			mentionSpans[i].removeClass("inactive")
-				.addClass("mentionStyle");
-			if (currentContent.guess[i] == currentContent.guess[mIdx]){
-				mentionSpans[i].addClass("guess");
-			}
-		}
-	}
+	//Mark guess clusters
+	$( ".guess"+currentContent.guess[mIdx]).removeClass( "inactive" )
+				.addClass("guess");
 }
 
 display(contentJSON);
@@ -133,10 +183,3 @@ display(contentJSON);
 $( ".mention" ).click(function( event ) {
   toggleMention(event.currentTarget);
 });
-/*
-$( ".mention" ).hover(function( event ) {
-  hoverMention(event.currentTarget);
-},function( event ) {
-  unhoverMention(event.currentTarget);
-});
-*/
