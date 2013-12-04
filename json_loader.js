@@ -81,7 +81,14 @@ holder.ondrop = function (e) {
         //li.innerHTML= "<span>"+doc.id+"</span>";
         li.innerHTML=doc.id;
 
-        ul.addEventListener("click",function(e) {
+        
+
+        ul.appendChild(li);
+
+        
+        //$('#doclist').append('<li>Document: '+ doc.id +'</li>');
+      };
+      ul.addEventListener("click",function(e) {
             // e.target is our targetted element.
             // try doing console.log(e.target.nodeName), it will result LI
 
@@ -95,12 +102,6 @@ holder.ondrop = function (e) {
                 //contentSpan.innerHTML = jsonArray[parseInt(docNumClicked)].content.string.join(" ");
             }
         });
-
-        ul.appendChild(li);
-
-        
-        //$('#doclist').append('<li>Document: '+ doc.id +'</li>');
-      };
 
       document.getElementById('leftBar').appendChild(ul);
       //var contentSpan = document.getElementById('contentSpan');
@@ -128,20 +129,7 @@ function addBackAllDocs(){
         //li.innerHTML= "<span>"+doc.id+"</span>";
         li.innerHTML=doc.id;
 
-        document.getElementById('doclist').addEventListener("click",function(e) {
-            // e.target is our targetted element.
-            // try doing console.log(e.target.nodeName), it will result LI
-
-            if(e.target && e.target.nodeName == "LI") {
-
-                console.log(e.target.id + " was clicked");
-                var re = /li_/gi;
-                var docNumClicked = e.target.id.replace(re, "");
-                //var contentSpan = document.getElementById('contentSpan');
-                //contentSpan.innerHTML = jsonArray[parseInt(docNumClicked)].content.string.join(" ");
-                display(jsonArray[parseInt(docNumClicked)].content);
-            }
-        });
+        
 
         document.getElementById('doclist').appendChild(li);
 
@@ -150,6 +138,7 @@ function addBackAllDocs(){
       };
       //var contentSpan = document.getElementById('contentSpan');
       //contentSpan.innerHTML = jsonArray[0].content.string.join(" ");
+    
       display(jsonArray[0].content);
 }
 
@@ -173,20 +162,7 @@ function searchDoc(){
           //li.innerHTML= "<span>"+doc.id+"</span>";
           li.innerHTML=doc.id;
 
-          document.getElementById('doclist').addEventListener("click",function(e) {
-              // e.target is our targetted element.
-              // try doing console.log(e.target.nodeName), it will result LI
-
-              if(e.target && e.target.nodeName == "LI") {
-
-                  console.log(e.target.id + " was clicked");
-                  var re = /li_/gi;
-                  var docNumClicked = e.target.id.replace(re, "");
-                  //var contentSpan = document.getElementById('contentSpan');
-                  //contentSpan.innerHTML = jsonArray[parseInt(docNumClicked)].content.string.join(" ");
-                  display(jsonArray[parseInt(docNumClicked)].content);
-              }
-          });
+          
 
           document.getElementById('doclist').appendChild(li);
         }
@@ -196,6 +172,7 @@ function searchDoc(){
       };
       //var contentSpan = document.getElementById('contentSpan');
       //contentSpan.innerHTML = jsonArray[firstIndex].content.string.join(" ");
+      
       display(jsonArray[0].content);
   
 
