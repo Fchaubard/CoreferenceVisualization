@@ -1,9 +1,126 @@
+body {
+  font: 10px sans-serif;
+  font-family: sans-serif;
+  font-name: "Lucida Grande";}
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.point {
+  stroke: #000;
+}
+
+#container {
+  display: none;
+  border: 10px #ccc; 
+  width: 1000px; 
+  height: 400px; 
+  margin: 40px auto;
+}
+
+#leftBar {
+  background-color:#C0D9D9; 
+  text-align: center;
+  vertical-align: middle;   
+  float:left;
+  border: 10px #ccc; 
+  width: %20; 
+  max-height: 900px;
+  padding-right: 2px;
+  margin: 20px auto;
+}
+#leftBar ul { margin:0px; padding:0px; }
+ 
+ul.top-level { background:#666; }
+ul.top-level li {
+ border-bottom: #fff solid;
+ border-top: #fff solid;
+ border-width: 1px;
+} 
+#leftBar li {
+ border:1px solid #000;
+ list-style: none;
+ color: #fff;
+ background: #87421F;
+ display:block;
+ height:45px;
+ line-height: 55px;
+ text-indent: 4px;
+ text-decoration:none;
+ width:100%;
+}
+#leftBar li:hover {
+ background: #f90;
+ position: relative;
+}
+#leftBar li span {
+  text-decoration: none;
+  color: #000;
+  display: block;
+  width: 200px;
+ 
+  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
+  transition: font-size 0.3s ease, background-color 0.3s ease;
+}
+#holder { 
+  background-color:#E8E8E8; 
+  text-align: center;
+  vertical-align: middle; 
+  line-height: 300px;   
+  clear:both;
+  border: 10px dashed #ccc; 
+  width: 300px; 
+  height: 300px; 
+  margin: 20px auto;
+}
+
+#holder.hover { 
+  border: 10px dashed #333; 
+  width: 300px; 
+  height: 300px; 
+  margin: 20px auto;
+}
+#holder.drop { 
+  border: 10px dashed #333; 
+  width: 100px; 
+  height: 100px; 
+  margin: 10px auto;
+}
+input.rounded {
+    border: 1px solid #ccc;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    -moz-box-shadow: 2px 2px 3px #666;
+    -webkit-box-shadow: 2px 2px 3px #666;
+    box-shadow: 2px 2px 3px #666;
+    font-size: 20px;
+    padding: 4px 7px;
+    outline: 0;
+    -webkit-appearance: none;
+}
+input.rounded:focus {
+
+    border-color: #339933;
+
+}
 #docDisplay{padding: 20px;
 	background-color: #FFFFFF;
-	width: 800px;
-	line-height:200%;}
-body{font-family: sans-serif;
-	font-name: "Lucida Grande";}
+	width: %70;
+	height: inherit;
+	overflow:auto;
+	line-height:2;
+	}
+#key{
+font-size: 14px;
+}
 .mentionStyle{font-size: 18px;
 	font-weight: bold;
 	opacity: 1;
