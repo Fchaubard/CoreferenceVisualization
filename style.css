@@ -1,5 +1,7 @@
 #docDisplay{padding: 20px;
-	background-color: #FFFFFF;}
+	background-color: #FFFFFF;
+	width: 800px;
+	line-height:200%;}
 body{font-family: sans-serif;
 	font-name: "Lucida Grande";}
 .mentionStyle{font-size: 18px;
@@ -8,8 +10,8 @@ body{font-family: sans-serif;
 .textStyle{font-size: 16px;}
 .inactive{opacity: 0.3;}
 .guess {background-color: #EEEEEE;}
-.guess.selected {border: 1px solid black;}
-.incorrect {border-bottom: 1px solid red;}
+.guess.selected {background-color: #DDDDDD;}
+.incorrect {border-bottom: 2px solid red;}
 #key{padding: 20px;}
 .on.exterior{
 	opacity: 1;
