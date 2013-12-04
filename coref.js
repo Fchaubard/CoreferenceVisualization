@@ -132,14 +132,14 @@ function display(content) {
 //Toggle on/off mentions
 function toggleMention(mention){
 	var mIdx = parseInt(mention.id.substring(1));
+	$( ".exterior" ).removeClass("on");
 	if ($( "#m"+mIdx ).hasClass("interior")){
 		interiorMentionClick = true;
-		$( ".exterior" ).addClass("on");
 	} else if (interiorMentionClick){
+		//Turn on other exterior mentions
+		$( ".gold"+currentContent.gold[mIdx] ).addClass("on");
 		interiorMentionClick = false;
 		return;
-	} else {
-		$( ".exterior" ).removeClass("on");
 	}
 	//Same mention was selected, reset display
 	if (mIdx == currentMentionId){
