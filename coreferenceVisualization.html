@@ -585,6 +585,11 @@ function display(content) {
     mentionSpans[i].append(content.string.slice(idx,content.mentionEnd[i]).join(" ")).append(" ");
     idx = content.mentionEnd[i];
   }
+  
+	$( ".mention" ).click(function( event ) {
+	  toggleMention(event.currentTarget);
+	});
+
 }
 
 //Toggle on/off mentions
@@ -625,13 +630,6 @@ function toggleMention(mention){
   $( ".guess"+currentContent.guess[mIdx]).removeClass( "inactive" )
         .addClass("guess");
 }
-
-
-
-$( ".mention" ).click(function( event ) {
-  toggleMention(event.currentTarget);
-});
-
 
 </script>
 
