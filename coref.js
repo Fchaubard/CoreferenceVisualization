@@ -3,7 +3,7 @@ var contentJSON = {"mentionEnd":[7,11,21,25,31,31,37,41,45,51,51,54,56,61,63,75,
 //CODE STARTS HERE
 var colorIdx=0;
 var colorMap = [];
-var colors = ["#377EB8","#4DAF4A","#984EA3","#FF7F00","#A65628","#F781BF","#999999","#A6CEE3","#1F78B4","#B2DF8A","#33A02C","#FB9A99","#E31A1C","#FDBF6F","#FF7F00","#CAB2D6","#6A3D9A","#FFFF99"];
+var colors = ["#E41A1C","#377EB8","#4DAF4A","#984EA3","#FF7F00","#A65628","#F781BF","#999999","#A6CEE3","#1F78B4","#B2DF8A","#33A02C","#FB9A99","#E31A1C","#FDBF6F","#FF7F00","#CAB2D6","#6A3D9A","#FFFF99"];
 var currentMentionId = -1;
 var mentionSpans=[];
 var currentContent;

@@ -7,11 +7,16 @@ body{font-family: sans-serif;
 .mentionStyle{font-size: 18px;
 	font-weight: bold;
 	opacity: 1;
-	cursor: pointer;}	
+	cursor: pointer;
+	padding: 2px;
+	}	
 .textStyle{font-size: 16px;}
 .inactive{opacity: 0.3;}
-.guess {background-color: #DDDDDD;}
-.guess.selected {background-color: #CCCCCC;}
+.guess {
+text-shadow: 0 0 20px black;
+}
+.selected {border: 1px solid blue;
+}
 .incorrect {border-bottom: 2px solid red;}
 #key{padding: 20px;}
 .on.exterior{
