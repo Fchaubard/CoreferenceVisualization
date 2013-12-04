@@ -12,6 +12,8 @@
 <style>
 body {
   font: 10px sans-serif;
+  font-family: sans-serif;
+  font-name: "Lucida Grande";}
 }
 
 .axis path, .axis line {
@@ -87,17 +89,7 @@ ul.top-level li {
   transition: font-size 0.3s ease, background-color 0.3s ease;
 }
 
-#docDisplay {
-  background-color:#ADEAEA;
-  text-align: center;
-  vertical-align: middle;   
-  float:right;
-  border: 10px #ccc; 
-  width: 600px; 
-  max-height: 900px;
-  margin: 20px auto;
 
-}
 
 #holder { 
   background-color:#E8E8E8; 
@@ -144,18 +136,27 @@ input.rounded:focus {
 
 }
 
-#docDisplay{padding: 20px;
-  background-color: #FFFFFF;
-  width: 800px;
-  line-height:200%;}
-body{font-family: sans-serif;
-  font-name: "Lucida Grande";}
+
+#docDisplay {
+  line-height:200%;
+  background-color:#FFFFFF;
+  text-align: center;
+  vertical-align: middle;   
+  float:right;
+  border: 10px #ccc; 
+  width: 600px; 
+  max-height: 900px;
+  margin: 20px auto;
+
+}
+
 .mentionStyle{font-size: 18px;
   font-weight: bold;
   opacity: 1;
   cursor: pointer;
   padding: 2px;
   } 
+
 .textStyle{font-size: 16px;}
 .inactive{opacity: 0.3;}
 .guess {
@@ -164,11 +165,12 @@ text-shadow: 0 0 20px black;
 .selected {border: 1px solid blue;
 }
 .incorrect {border-bottom: 2px solid red;}
+
 #key{padding: 20px;}
+
 .on.exterior{
   opacity: 1;
 }
-
 
 </style>
 
