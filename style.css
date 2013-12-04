@@ -124,6 +124,7 @@ margin-top: 20px;
 float:right;
 border: 10px #000000; 
 border-style:solid;
+	line-height:1.5;
 }
 .mentionStyle{font-size: 18px;
 	font-weight: bold;
@@ -133,9 +134,12 @@ border-style:solid;
 	}	
 .textStyle{font-size: 16px;}
 .inactive{opacity: 0.3;}
-.guess {
+.guessStyle {
 border: 1px solid black;
 padding: 1px;
+}
+.goldStyle {
+text-shadow: 0 0 10px;
 }
 .selected {background-color: #EEEEEE;
 }

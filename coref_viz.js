@@ -1,6 +1,6 @@
 var colorIdx=0;
 var colorMap = [];
-var colors = ["#E41A1C","#377EB8","#4DAF4A","#984EA3","#FF7F00","#A65628","#F781BF","#999999","#A6CEE3","#1F78B4","#B2DF8A","#33A02C","#FB9A99","#E31A1C","#FDBF6F","#FF7F00","#CAB2D6","#6A3D9A","#FFFF99"];
+var colors = ["#E41A1C","#377EB8","#4DAF4A","#984EA3","#FF7F00","#A65628","#F781BF","#999999","#A6CEE3","#1F78B4","#B2DF8A","#33A02C","#FB9A99","#E31A1C","#FDBF6F","#FF7F00","#CAB2D6","#6A3D9A"];
 var currentMentionId = -1;
 var mentionSpans=[];
 var currentContent;
@@ -18,7 +18,7 @@ function resetGlobals(){
 //Return a color from the colors array for the given clusterId
 function getColor(clusterId){
 	//Check that you don't go past the end of colors array
-	colorIdx = colorIdx == colors.length ? colors.length - 1 : colorIdx;
+	colorIdx = colorIdx == colors.length ? 0 : colorIdx;
 	//If clusterId hasnt been mapped to a color yet
 	if (!colorMap[clusterId])
 		colorMap[clusterId] = colors[colorIdx++];
@@ -78,7 +78,7 @@ function updateEntityIds(){
 	var guessIdxArray = clusterIndexArray(currentContent.guess);
 	//Build an array of the indices of the
 	//Find maximum overlap for each cluster
-	for (var i=0;i<goldIdxArray.length;i++){
+	for (var i=goldIdxArray.length-1;i>=0;i--){
 		if (goldIdxArray[i]){
 			var overlap=0;
 			var guessClusterId=-1;
@@ -135,12 +135,27 @@ function display(content) {
 		idx = content.mentionEnd[i];
 	}
 	$( ".mention" ).click(function( event ) {
-	  toggleMention(event.currentTarget);
+	  selectMention(event.currentTarget);
+	});
+	$( ".textStyle" ).click(function( event ) {
+	  unselectAll();
 	});
 }
 
-//Toggle on/off mentions
-function toggleMention(mention){
+//Resets doc display to original display
+function unselectAll(){
+		$( ".mention" ).removeClass("guess")
+			.removeClass("inactive")
+			.removeClass("guessStyle")
+			.removeClass("goldStyle")
+			.removeClass("selected")
+			.addClass("mentionStyle");
+		currentMentionId = -1;
+		$( ".textStyle" ).removeClass("inactive");
+}
+
+//Select a mention
+function selectMention(mention){
 	var mIdx = parseInt(mention.id.substring(1));
 	$( ".exterior" ).removeClass("on");
 	if ($( "#m"+mIdx ).hasClass("interior")){
@@ -153,13 +168,7 @@ function toggleMention(mention){
 	}
 	//Same mention was selected, reset display
 	if (mIdx == currentMentionId){
-		$( ".mention" ).removeClass("guess")
-			.removeClass("inactive")
-			.removeClass("guess")
-			.removeClass("selected")
-			.addClass("mentionStyle");
-		currentMentionId = -1;
-		$( ".textStyle" ).removeClass("inactive");
+		unselectAll();
 		return;
 	} else {
 		//Set mention to selected, make all mentions inactive
@@ -167,13 +176,16 @@ function toggleMention(mention){
 		$( ":not(#m"+mIdx+")" ).removeClass( "selected" );
 		$( ".textStyle" ).addClass("inactive");
 		$( ".mention" ).addClass("inactive")
-					.removeClass("guess");
+					.removeClass("goldStyle")
+					.removeClass("guessStyle");
 		currentMentionId = mIdx;
 	}
 	//Mark gold clusters
 	$( ".gold"+currentContent.gold[mIdx]).removeClass( "inactive" )
+				.addClass("goldStyle")
 				.addClass("mentionStyle");
 	//Mark guess clusters
 	$( ".guess"+currentContent.guess[mIdx]).removeClass( "inactive" )
-				.addClass("guess");
+				.addClass("mentionStyle")
+				.addClass("guessStyle");
 }
