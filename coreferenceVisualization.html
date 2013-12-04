@@ -270,6 +270,7 @@ holder.ondrop = function (e) {
       var contentSpan = document.getElementById('content');
       contentSpan.innerHTML = jsonArray[0].content.string.join(" ");
 
+
     }catch(e){
      console.error("Parsing error!!!:", e); 
     }
@@ -310,7 +311,6 @@ function addBackAllDocs(){
         
         //$('#doclist').append('<li>Document: '+ doc.id +'</li>');
       };
-      document.getElementById('leftBar').appendChild(ul);
       var contentSpan = document.getElementById('content');
       contentSpan.innerHTML = jsonArray[0].content.string.join(" ");
 
@@ -356,7 +356,6 @@ function searchDoc(){
         
         //$('#doclist').append('<li>Document: '+ doc.id +'</li>');
       };
-      document.getElementById('leftBar').appendChild(ul);
       var contentSpan = document.getElementById('content');
       contentSpan.innerHTML = jsonArray[firstIndex].content.string.join(" ");
 
