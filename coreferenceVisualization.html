@@ -1,7 +1,13 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<style>
+<html lang="en">
+<head>
+<meta charset=utf-8>
+<meta name="viewport" content="width=620">
+<title>HTML5 Demo: File API</title>
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<style>
 body {
   font: 10px sans-serif;
 }
@@ -16,106 +22,374 @@ body {
   stroke: #000;
 }
 
+#container {
+
+  border: 10px #ccc; 
+  width: 862px; 
+  max-height: 900px; 
+  margin: 20px auto;
+
+}
+
+#leftBar {
+  background-color:#C0D9D9; 
+  text-align: center;
+  vertical-align: middle;   
+  float:left;
+  border: 10px #ccc; 
+  width: 250px; 
+  max-height: 900px;
+  padding-right: 2px;
+  
+  margin: 20px auto;
+
+}
+#leftBar ul { margin:0px; padding:0px; }
+ 
+ul.top-level { background:#666; }
+ul.top-level li {
+ border-bottom: #fff solid;
+ border-top: #fff solid;
+ border-width: 1px;
+}
+ 
+#leftBar li {
+ border:1px solid #000;
+ list-style: none;
+ color: #fff;
+ background: #87421F;
+ display:block;
+ height:45px;
+ line-height: 55px;
+ text-indent: 4px;
+ text-decoration:none;
+ width:100%;
+
+
+}
+ 
+#leftBar li:hover {
+ background: #f90;
+ position: relative;
+}
+#leftBar li span {
+  text-decoration: none;
+  color: #000;
+  display: block;
+  width: 200px;
+ 
+  -webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -moz-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -o-transition: font-size 0.3s ease, background-color 0.3s ease;
+  -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
+  transition: font-size 0.3s ease, background-color 0.3s ease;
+}
+
+#docContent {
+  background-color:#ADEAEA;
+  text-align: center;
+  vertical-align: middle;   
+  float:right;
+  border: 10px #ccc; 
+  width: 600px; 
+  max-height: 900px;
+  margin: 20px auto;
+
+}
+
+#holder { 
+  background-color:#E8E8E8; 
+  text-align: center;
+  vertical-align: middle; 
+  line-height: 300px;   
+  clear:both;
+  border: 10px dashed #ccc; 
+  width: 300px; 
+  height: 300px; 
+  margin: 20px auto;
+}
+
+#holder.hover { 
+  border: 10px dashed #333; 
+  width: 300px; 
+  height: 300px; 
+  margin: 20px auto;
+}
+#holder.drop { 
+  border: 10px dashed #333; 
+  width: 100px; 
+  height: 100px; 
+  margin: 10px auto;
+}
+
+input.rounded {
+    border: 1px solid #ccc;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    -moz-box-shadow: 2px 2px 3px #666;
+    -webkit-box-shadow: 2px 2px 3px #666;
+    box-shadow: 2px 2px 3px #666;
+    font-size: 20px;
+    padding: 4px 7px;
+    outline: 0;
+    -webkit-appearance: none;
+}
+
+input.rounded:focus {
+
+    border-color: #339933;
+
+}
+
+
 </style>
+
+
+</head>
+
 <body>
-<script src="http://d3js.org/d3.v2.js?2.9.6"></script>
-<script>
+<article>
+  <div id="container">
+    <div id="leftBar">
 
-var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
-
-var x = d3.scale.linear()
-    .range([0, width]);
-
-var y = d3.scale.linear()
-    .range([height, 0]);
-
-var z = d3.scale.category10();
-
-var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-d3.csv("data.csv", function(data) {
-
-  // Compute the series names ("y1", "y2", etc.) from the loaded CSV.
-  var seriesNames = d3.keys(data[0])
-      .filter(function(d) { return d !== "x"; })
-      .sort();
-
-  // Map the data to an array of arrays of {x, y} tuples.
-  var series = seriesNames.map(function(series) {
-    return data.map(function(d) {
-      return {x: +d.x, y: +d[series]};
-    });
-  });
-
-  // Compute the scales’ domains.
-  x.domain(d3.extent(d3.merge(series), function(d) { return d.x; })).nice();
-  y.domain(d3.extent(d3.merge(series), function(d) { return d.y; })).nice();
-
-  // Add the x-axis.
-  svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.svg.axis().scale(x).orient("bottom"));
-
-  // Add the y-axis.
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(d3.svg.axis().scale(y).orient("left"));
-
-  // Add the points!
-  svg.selectAll(".series")
-      .data(series)
-    .enter().append("g")
-      .attr("class", "series")
-      .style("fill", function(d, i) { return z(i); })
-    .selectAll(".point")
-      .data(function(d) { return d; })
-    .enter().append("circle")
-      .attr("class", "point")
-      .attr("r", 4.5)
-      .attr("cx", function(d) { return x(d.x); })
-      .attr("cy", function(d) { return y(d.y); });
-});
-
-</script>
-
-
-
-<div id="drop_zone">Drop files here</div>
-<output id="list"></output>
+      <!--<input id="searchBox" onkeypress="searchDoc()"/> -->
+      
+    </div>
+    <div id="docContent">
+      <span id="content"></span>
+    </div>
+  </div>
+  <div id="holder"><span id="feedMe">Feed me JSON file!</span></div> 
+  <p id="status">File API & FileReader API not supported</p>
+  <!--<p id="thejsonfile">nothing</p>-->
+  <p id="theDocument"></p>
+  
+</article>
+</body>
 
 <script>
-  function handleFileSelect(evt) {
-    evt.stopPropagation();
-    evt.preventDefault();
 
-    var files = evt.dataTransfer.files; // FileList object.
+var holder = document.getElementById('holder'),
+    thejsonfile = document.getElementById('thejsonfile'),
+    state = document.getElementById('status'),
+    docList = document.getElementById('doclist');
 
-    // files is a FileList of File objects. List some properties.
-    var output = [];
-    for (var i = 0, f; f = files[i]; i++) {
-      output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-                  f.size, ' bytes, last modified: ',
-                  f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-                  '</li>');
+var thejsonobject;
+
+//docList.style.visibility="hidden";
+
+if (typeof window.FileReader === 'undefined') {
+  state.className = 'fail';
+} else {
+  state.className = 'success';
+  state.innerHTML = 'File API & FileReader available';
+}
+ 
+holder.ondragover = function () { this.className = 'hover'; document.getElementById('feedMe').innerHTML = 'drop it like its hot!'; return false; };
+holder.ondragend = function () { this.className = 'nohover';document.getElementById('feedMe').innerHTML = 'Feed me JSON file!'; return false; };
+holder.ondragleave = function (){ this.className = 'nohover'; document.getElementById('feedMe').innerHTML = 'Feed me JSON file!'; return false; };
+
+holder.ondrop = function (e) {
+
+
+  this.className = 'nohover';
+  document.getElementById('feedMe').innerHTML = 'Feed me JSON file!';
+  e.preventDefault();
+
+  var file = e.dataTransfer.files[0],
+      reader = new FileReader();
+
+
+  reader.onload = function (event) {
+    console.log(event.target);
+    holder.style.background = 'url(' + event.target.result + ') no-repeat center';
+  };
+
+  console.log(file);
+  reader.readAsText( file, "UTF-8" ) 
+  state.innerHTML = 'GOTCHURFILE';
+  reader.onload = function(e){
+
+    //thejsonfile.innerHTML = reader.result;
+    try {
+
+      jsonArray = JSON.parse(reader.result);
+      if(document.getElementById('searchBox')){
+          document.getElementById('leftBar').innerHTML='';
+      }
+      //docList.style.visibility="visible";
+      //document.getElementById('doclist').innerHTML = '';
+      var contentSpan = document.getElementById('content');
+      contentSpan.innerHTML = '';
+      var mi = document.createElement("input");
+      mi.setAttribute('type', 'text');
+      mi.setAttribute('value', '');
+      mi.setAttribute('onkeydown','checkForEmptyInput()');
+      mi.setAttribute('onkeyup','searchDoc()');
+      mi.setAttribute('className','rounded');
+      mi.setAttribute('id','searchBox');
+
+      document.getElementById('leftBar').appendChild(mi);
+      
+      var ul = document.createElement("ul");
+      ul.setAttribute('className', 'top-level');
+      ul.setAttribute('id', 'doclist');
+
+      for (var i =0  ; i < jsonArray.length; i++) {
+        
+        var doc = jsonArray[i];
+        //var ul = document.getElementById('doclist');
+
+        var li = document.createElement("li");
+        li.setAttribute("id", "li_"+i);
+        //li.innerHTML= "<span>"+doc.id+"</span>";
+        li.innerHTML=doc.id;
+
+        ul.addEventListener("click",function(e) {
+            // e.target is our targetted element.
+            // try doing console.log(e.target.nodeName), it will result LI
+
+            if(e.target && e.target.nodeName == "LI") {
+
+                console.log(e.target.id + " was clicked");
+                var re = /li_/gi;
+                var docNumClicked = e.target.id.replace(re, "");
+                var contentSpan = document.getElementById('content');
+                contentSpan.innerHTML = jsonArray[parseInt(docNumClicked)].content.string.join(" ");
+            }
+        });
+
+        ul.appendChild(li);
+
+        
+        //$('#doclist').append('<li>Document: '+ doc.id +'</li>');
+      };
+
+      document.getElementById('leftBar').appendChild(ul);
+      var contentSpan = document.getElementById('content');
+      contentSpan.innerHTML = jsonArray[0].content.string.join(" ");
+
+    }catch(e){
+     console.error("Parsing error!!!:", e); 
     }
-    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-  }
 
-  function handleDragOver(evt) {
-    evt.stopPropagation();
-    evt.preventDefault();
-    evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
-  }
+  };
 
-  // Setup the dnd listeners.
-  var dropZone = document.getElementById('drop_zone');
-  dropZone.addEventListener('dragover', handleDragOver, false);
-  dropZone.addEventListener('drop', handleFileSelect, false);
+  return false;
+};
+
+
+function addBackAllDocs(){
+  for (var i =0  ; i < jsonArray.length; i++) {
+        
+        var doc = jsonArray[i];
+        //var ul = document.getElementById('doclist');
+
+        var li = document.createElement("li");
+        li.setAttribute("id", "li_"+i);
+        //li.innerHTML= "<span>"+doc.id+"</span>";
+        li.innerHTML=doc.id;
+
+        document.getElementById('doclist').addEventListener("click",function(e) {
+            // e.target is our targetted element.
+            // try doing console.log(e.target.nodeName), it will result LI
+
+            if(e.target && e.target.nodeName == "LI") {
+
+                console.log(e.target.id + " was clicked");
+                var re = /li_/gi;
+                var docNumClicked = e.target.id.replace(re, "");
+                var contentSpan = document.getElementById('content');
+                contentSpan.innerHTML = jsonArray[parseInt(docNumClicked)].content.string.join(" ");
+            }
+        });
+
+        document.getElementById('doclist').appendChild(li);
+
+        
+        //$('#doclist').append('<li>Document: '+ doc.id +'</li>');
+      };
+      document.getElementById('leftBar').appendChild(ul);
+      var contentSpan = document.getElementById('content');
+      contentSpan.innerHTML = jsonArray[0].content.string.join(" ");
+
+}
+
+
+function searchDoc(){
+
+    document.getElementById('doclist').innerHTML='';
+    var query = document.getElementById('searchBox').value;
+    var firstIndex=-1;
+    for (var i =0  ; i < jsonArray.length; i++) {
+        
+        var doc = jsonArray[i];
+        //var ul = document.getElementById('doclist');
+
+        if ((doc.id.indexOf(query) !== -1)||(doc.content.string.join(" ").indexOf(query) !== -1)){
+          if (firstIndex==-1){
+            firstIndex=i;
+          }
+          var li = document.createElement("li");
+          li.setAttribute("id", "li_"+i);
+          //li.innerHTML= "<span>"+doc.id+"</span>";
+          li.innerHTML=doc.id;
+
+          document.getElementById('doclist').addEventListener("click",function(e) {
+              // e.target is our targetted element.
+              // try doing console.log(e.target.nodeName), it will result LI
+
+              if(e.target && e.target.nodeName == "LI") {
+
+                  console.log(e.target.id + " was clicked");
+                  var re = /li_/gi;
+                  var docNumClicked = e.target.id.replace(re, "");
+                  var contentSpan = document.getElementById('content');
+                  contentSpan.innerHTML = jsonArray[parseInt(docNumClicked)].content.string.join(" ");
+              }
+          });
+
+          document.getElementById('doclist').appendChild(li);
+        }
+
+        
+        //$('#doclist').append('<li>Document: '+ doc.id +'</li>');
+      };
+      document.getElementById('leftBar').appendChild(ul);
+      var contentSpan = document.getElementById('content');
+      contentSpan.innerHTML = jsonArray[firstIndex].content.string.join(" ");
+
+  
+
+  
+  //alert(document.getElementById('searchBox').value);
+
+}
+
+function checkForEmptyInput(){
+
+   var KeyID = event.keyCode;
+   if(document.getElementById('searchBox').value.length < 2 ){
+     switch(KeyID)
+     {
+        case 8:
+        addBackAllDocs();
+        break; 
+        case 46:
+        addBackAllDocs();
+        break;
+        default:
+        break;
+     }
+   }else{
+    searchDoc();
+   }
+
+
+}
+
+
 </script>
+
+</html>
