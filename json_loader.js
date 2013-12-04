@@ -24,7 +24,7 @@ holder.ondrop = function (e) {
  $( "#container" ).toggle();
 
 
-  this.className = 'nohover';
+  this.className = 'drop';
   document.getElementById('feedMe').innerHTML = 'Feed me JSON file!';
   e.preventDefault();
 
@@ -119,6 +119,8 @@ holder.ondrop = function (e) {
 
 
 function addBackAllDocs(){
+
+  document.getElementById('doclist').innerHTML='';
   for (var i =0  ; i < jsonArray.length; i++) {
         
         var doc = jsonArray[i];
@@ -172,8 +174,13 @@ function searchDoc(){
       };
       //var contentSpan = document.getElementById('contentSpan');
       //contentSpan.innerHTML = jsonArray[firstIndex].content.string.join(" ");
-      
-      display(jsonArray[0].content);
+      if(firstIndex>-1){
+          display(jsonArray[firstIndex].content);
+      }
+      else{
+        $( "#docDisplay" ).text("");
+      }
+
   
 
   
