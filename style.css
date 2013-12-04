@@ -13,9 +13,10 @@ body{font-family: sans-serif;
 .textStyle{font-size: 16px;}
 .inactive{opacity: 0.3;}
 .guess {
-text-shadow: 0 0 20px black;
+border: 1px solid black;
+padding: 1px;
 }
-.selected {border: 1px solid blue;
+.selected {background-color: #EEEEEE;
 }
 .incorrect {border-bottom: 2px solid red;}
 #key{padding: 20px;}
