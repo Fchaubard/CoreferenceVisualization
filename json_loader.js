@@ -22,14 +22,29 @@ dropbox.ondragleave = function (){ this.className = 'nohover'; state.innerHTML =
 container.ondragover = function() {main.className = 'hover'; return false; };
 container.ondragleave = function() {main.className = 'nohover'; return false; };
 
+//Create search box
+var mi = document.createElement("input");
+mi.setAttribute('type', 'text');
+mi.setAttribute('value', '');
+mi.setAttribute('onkeydown','checkForEmptyInput()');
+mi.setAttribute('onkeyup','searchDoc()');
+mi.setAttribute('className','rounded');
+mi.setAttribute('id','searchBox');
+document.getElementById('leftBar').appendChild(mi);
+
+//Create doc list
+var ul = document.createElement("ul");
+ul.setAttribute('className', 'top-level');
+ul.setAttribute('id', 'doclist');
+
 main.ondrop = function (e) {
 
- //enable container
- $( "#container" ).show();
- $( "#key" ).show();
- //hide dropbox
- $( "#dropbox" ).hide();
-
+  //enable container
+  $( "#container" ).show();
+  $( "#key" ).show();
+  //hide dropbox
+  $( "#dropbox" ).hide();
+    
   this.className = 'drop';
   state.innerHTML = stateStr;
   e.preventDefault();
@@ -45,54 +60,23 @@ main.ondrop = function (e) {
 
   console.log(file);
   reader.readAsText( file, "UTF-8" ) 
- // state.innerHTML = 'GOTCHURFILE';
+
   reader.onload = function(e){
-
-    //thejsonfile.innerHTML = reader.result;
     try {
-
       jsonArray = JSON.parse(reader.result);
-      if(document.getElementById('searchBox')){
-          document.getElementById('leftBar').innerHTML='';
-          document.getElementById('doclist').innerHTML = '';
-
-      }
-      //docList.style.visibility="visible";
-      
-      //var contentSpan = document.getElementById('contentSpan');
-      //contentSpan.innerHTML = '';
+	//Empty the list
+	while(ul.firstChild) {
+	    ul.removeChild( ul.firstChild );
+	}
+	//Clear the doc display
       $( "#docDisplay" ).text("");
-
-      var mi = document.createElement("input");
-      mi.setAttribute('type', 'text');
-      mi.setAttribute('value', '');
-      mi.setAttribute('onkeydown','checkForEmptyInput()');
-      mi.setAttribute('onkeyup','searchDoc()');
-      mi.setAttribute('className','rounded');
-      mi.setAttribute('id','searchBox');
-
-      document.getElementById('leftBar').appendChild(mi);
       
-      var ul = document.createElement("ul");
-      ul.setAttribute('className', 'top-level');
-      ul.setAttribute('id', 'doclist');
-
       for (var i =0  ; i < jsonArray.length; i++) {
-        
         var doc = jsonArray[i];
-        //var ul = document.getElementById('doclist');
-
         var li = document.createElement("li");
         li.setAttribute("id", "li_"+i);
-        //li.innerHTML= "<span>"+doc.id+"</span>";
         li.innerHTML=doc.id;
-
-        
-
         ul.appendChild(li);
-
-        
-        //$('#doclist').append('<li>Document: '+ doc.id +'</li>');
       };
       ul.addEventListener("click",function(e) {
             // e.target is our targetted element.
@@ -152,16 +136,14 @@ function addBackAllDocs(){
 
 
 function searchDoc(){
-
     document.getElementById('doclist').innerHTML='';
-    var query = document.getElementById('searchBox').value;
+    var query = document.getElementById('searchBox').value.toLowerCase();
     var firstIndex=-1;
     for (var i =0  ; i < jsonArray.length; i++) {
         
         var doc = jsonArray[i];
         //var ul = document.getElementById('doclist');
-
-        if ((doc.id.indexOf(query) !== -1)||(doc.content.string.join(" ").indexOf(query) !== -1)){
+        if ((doc.id.toLowerCase().indexOf(query) !== -1)||(doc.content.string.join(" ").toLowerCase().indexOf(query) !== -1)){
           if (firstIndex==-1){
             firstIndex=i;
           }
@@ -169,13 +151,8 @@ function searchDoc(){
           li.setAttribute("id", "li_"+i);
           //li.innerHTML= "<span>"+doc.id+"</span>";
           li.innerHTML=doc.id;
-
-          
-
           document.getElementById('doclist').appendChild(li);
         }
-
-        
         //$('#doclist').append('<li>Document: '+ doc.id +'</li>');
       };
       //var contentSpan = document.getElementById('contentSpan');
@@ -186,16 +163,10 @@ function searchDoc(){
       else{
         $( "#docDisplay" ).text("");
       }
-
-  
-
-  
   //alert(document.getElementById('searchBox').value);
-
 }
 
 function checkForEmptyInput(){
-
    var KeyID = event.keyCode;
    if(document.getElementById('searchBox').value.length < 2 ){
      switch(KeyID)
@@ -212,8 +183,6 @@ function checkForEmptyInput(){
    }else{
     searchDoc();
    }
-
-
 }
 
 
