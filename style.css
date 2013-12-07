@@ -3,13 +3,11 @@ body {
   font-family: sans-serif;
   font-name: "Lucida Grande";}
 }
-
 .axis path, .axis line {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
 }
-
 .point {
   stroke: #000;
 }
@@ -33,7 +31,7 @@ body {
 }
 #leftBar {
   text-align: center;
-  background-color:#C0D9D9; 
+  background-color:#EEEEEE; 
   vertical-align: middle;   
   float:left;
   border: 10px #ccc; 
@@ -52,10 +50,9 @@ ul.top-level li {
  border-width: 1px;
 } 
 #leftBar li {
- border:1px solid #000;
+ border-bottom:1px solid #DDDDDD;
  list-style: none;
- color: #fff;
- background: #87421F;
+ color: #000;
  display:block;
  height:45px;
  line-height: 55px;
@@ -64,8 +61,11 @@ ul.top-level li {
  width:100%;
 }
 #leftBar li:hover {
- background: #f90;
+ background: #DDDDDD;
  position: relative;
+}
+#leftBar li.selected {
+ background: #888888;
 }
 #leftBar li span {
   text-decoration: none;
@@ -121,9 +121,8 @@ input.rounded:focus {
     display: none;
     font-size: 14px;
     text-align:center;
-
     background-color: white;
-    line-height:1.5;
+    line-height:2;
     padding: 10px;
 }
 .mentionStyle{
@@ -145,6 +144,7 @@ input.rounded:focus {
 .selected {background-color: #EEEEEE;
 	  }
 .incorrect {border-bottom: 2px solid red;}
+.inactive.incorrect{border-bottom:none;}
 .on.exterior{
     opacity: 1;
 }

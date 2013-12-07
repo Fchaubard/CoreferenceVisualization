@@ -75,7 +75,9 @@ main.ondrop = function (e) {
         var doc = jsonArray[i];
         var li = document.createElement("li");
         li.setAttribute("id", "li_"+i);
-        li.innerHTML=doc.id;
+	//Flag element as docitem
+	li.className = "docItem";
+	li.innerHTML=doc.id;
         ul.appendChild(li);
       };
       ul.addEventListener("click",function(e) {
@@ -87,6 +89,9 @@ main.ondrop = function (e) {
                 console.log(e.target.id + " was clicked");
                 var re = /li_/gi;
                 var docNumClicked = e.target.id.replace(re, "");
+		//unselect all docitems
+		$( ".docItem" ).removeClass("selected");
+		$( "#"+e.target.id ).addClass("selected");
                 //var contentSpan = document.getElementById('contentSpan');
                 display(jsonArray[parseInt(docNumClicked)].content);
                 //contentSpan.innerHTML = jsonArray[parseInt(docNumClicked)].content.string.join(" ");
