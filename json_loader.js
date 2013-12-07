@@ -1,31 +1,37 @@
-var holder = document.getElementById('holder'),
-    thejsonfile = document.getElementById('thejsonfile'),
-    state = document.getElementById('status'),
-    docList = document.getElementById('doclist');
-
+var main = document.getElementById('main');
+var dropbox = document.getElementById('dropbox');
+var container = document.getElementById('container');
+var thejsonfile = document.getElementById('thejsonfile');
+var state = document.getElementById('status');
+var docList = document.getElementById('doclist');
 var thejsonobject;
 
-//docList.style.visibility="hidden";
+var stateStr = 'Drag JSON output file here';
+var dropStr = 'Drop JSON file!';
 
 if (typeof window.FileReader === 'undefined') {
-  state.className = 'fail';
+  state.className = 'File API & FileReader unavailable';
 } else {
   state.className = 'success';
-  state.innerHTML = 'File API & FileReader available';
+  state.innerHTML = stateStr;
 }
  
-holder.ondragover = function () { this.className = 'hover'; document.getElementById('feedMe').innerHTML = 'drop it like its hot!'; return false; };
-holder.ondragend = function () { this.className = 'nohover';document.getElementById('feedMe').innerHTML = 'Feed me JSON file!'; return false; };
-holder.ondragleave = function (){ this.className = 'nohover'; document.getElementById('feedMe').innerHTML = 'Feed me JSON file!'; return false; };
+dropbox.ondragover = function () { this.className = 'hover'; state.innerHTML = dropStr; return false; };
+dropbox.ondragend = function () { this.className = 'nohover'; state.innerHTML = stateStr; return false; };
+dropbox.ondragleave = function (){ this.className = 'nohover'; state.innerHTML = stateStr; return false; };
+container.ondragover = function() {main.className = 'hover'; return false; };
+container.ondragleave = function() {main.className = 'nohover'; return false; };
 
-holder.ondrop = function (e) {
+main.ondrop = function (e) {
 
  //enable container
- $( "#container" ).toggle();
-
+ $( "#container" ).show();
+ $( "#key" ).show();
+ //hide dropbox
+ $( "#dropbox" ).hide();
 
   this.className = 'drop';
-  document.getElementById('feedMe').innerHTML = 'Feed me JSON file!';
+  state.innerHTML = stateStr;
   e.preventDefault();
 
   var file = e.dataTransfer.files[0],
@@ -34,12 +40,12 @@ holder.ondrop = function (e) {
 
   reader.onload = function (event) {
     console.log(event.target);
-    holder.style.background = 'url(' + event.target.result + ') no-repeat center';
+    dropbox.style.background = 'url(' + event.target.result + ') no-repeat center';
   };
 
   console.log(file);
   reader.readAsText( file, "UTF-8" ) 
-  state.innerHTML = 'GOTCHURFILE';
+ // state.innerHTML = 'GOTCHURFILE';
   reader.onload = function(e){
 
     //thejsonfile.innerHTML = reader.result;

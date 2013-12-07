@@ -140,52 +140,61 @@ function display(content) {
 	$( ".textStyle" ).click(function( event ) {
 	  unselectAll();
 	});
+
+    //Set key
+    $( "#key1" ).show();
+    $( "#key2" ).hide();
 }
 
 //Resets doc display to original display
 function unselectAll(){
-		$( ".mention" ).removeClass("guess")
-			.removeClass("inactive")
-			.removeClass("guessStyle")
-			.removeClass("goldStyle")
-			.removeClass("selected")
-			.addClass("mentionStyle");
-		currentMentionId = -1;
-		$( ".textStyle" ).removeClass("inactive");
+    $( "#key1" ).show();
+    $( "#key2" ).hide();
+    $( ".mention" ).removeClass("guess")
+	.removeClass("inactive")
+	.removeClass("guessStyle")
+	.removeClass("goldStyle")
+	.removeClass("selected")
+	.addClass("mentionStyle");
+    currentMentionId = -1;
+    $( ".textStyle" ).removeClass("inactive");
 }
 
 //Select a mention
 function selectMention(mention){
-	var mIdx = parseInt(mention.id.substring(1));
-	$( ".exterior" ).removeClass("on");
-	if ($( "#m"+mIdx ).hasClass("interior")){
-		interiorMentionClick = true;
-	} else if (interiorMentionClick){
-		//Turn on other exterior mentions
-		$( ".gold"+currentContent.gold[mIdx] ).addClass("on");
-		interiorMentionClick = false;
-		return;
-	}
-	//Same mention was selected, reset display
-	if (mIdx == currentMentionId){
-		unselectAll();
-		return;
-	} else {
-		//Set mention to selected, make all mentions inactive
-		$( "#m"+mIdx ).addClass( "selected" );
-		$( ":not(#m"+mIdx+")" ).removeClass( "selected" );
-		$( ".textStyle" ).addClass("inactive");
-		$( ".mention" ).addClass("inactive")
-					.removeClass("goldStyle")
-					.removeClass("guessStyle");
-		currentMentionId = mIdx;
-	}
-	//Mark gold clusters
-	$( ".gold"+currentContent.gold[mIdx]).removeClass( "inactive" )
-				.addClass("goldStyle")
-				.addClass("mentionStyle");
-	//Mark guess clusters
-	$( ".guess"+currentContent.guess[mIdx]).removeClass( "inactive" )
-				.addClass("mentionStyle")
-				.addClass("guessStyle");
+    var mIdx = parseInt(mention.id.substring(1));
+    $( ".exterior" ).removeClass("on");
+    if ($( "#m"+mIdx ).hasClass("interior")){
+	interiorMentionClick = true;
+    } else if (interiorMentionClick){
+	//Turn on other exterior mentions
+	$( ".gold"+currentContent.gold[mIdx] ).addClass("on");
+	interiorMentionClick = false;
+	return;
+    }
+    //Same mention was selected, reset display
+    if (mIdx == currentMentionId){
+	unselectAll();
+	return;
+    } else {
+	//Set mention to selected, make all mentions inactive
+	$( "#m"+mIdx ).addClass( "selected" );
+	$( ":not(#m"+mIdx+")" ).removeClass( "selected" );
+	$( ".textStyle" ).addClass("inactive");
+	$( ".mention" ).addClass("inactive")
+	    .removeClass("goldStyle")
+	    .removeClass("guessStyle");
+	currentMentionId = mIdx;
+    }
+    //Mark gold clusters
+    $( ".gold"+currentContent.gold[mIdx]).removeClass( "inactive" )
+	.addClass("goldStyle")
+	.addClass("mentionStyle");
+    //Mark guess clusters
+    $( ".guess"+currentContent.guess[mIdx]).removeClass( "inactive" )
+	.addClass("mentionStyle")
+	.addClass("guessStyle");
+    //Set key visibility
+    $( "#key2" ).show();
+    $( "#key1" ).hide();
 }

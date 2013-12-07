@@ -10,19 +10,24 @@
 
 <body>
 <article>
-  <div id="container">
-    <div id="leftBar"></div>
-    <div id="docDisplay"></div> 
-  <div id="key">
+  <div id="main">
+    <div id="container">    
+      <div id="leftBar"></div>
+      <div id="docDisplay"></div> 
+      <div id="key">
+	<span id="key1">
 	  Select a <span class="selected guessStyle"><b>mention</b></span> to see its co-referent clusters.</br>
 	  Incorrectly clustered <span class="incorrect"><b>mentions</b></span> are underlined.</br>
+	</span>
+	<span id="key2">
 	  Gold clustered <span style="color:blue" class="goldStyle"><b>mentions</b></span> have the same <span style="color:blue" class="goldStyle"><b>color/background</b></span>.</br>
 	  Guess <span class="guessStyle" style="color:blue"><b>mention clusters</b></span> are <span class="guessStyle" style="color:blue"><b>bordered</b></span>.</br>
+	</span>
+      </div>
+    </div>
+    <div id="dropbox"><span id="status">Feed me JSON file!</span></div>
+    <p id="theDocument"></p>
   </div>
-  </div>
-  <div id="holder"><span id="feedMe">Feed me JSON file!</span></div> 
-  <p id="status">File API & FileReader API not supported</p>
-  <p id="theDocument"></p>
 </article>
 </body>
 <script src="json_loader.js"></script>

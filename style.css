@@ -13,15 +13,24 @@ body {
 .point {
   stroke: #000;
 }
-
+#main{
+  width: 1000px; 
+  height: 600px;
+  margin: 40px auto;
+  position:relative;
+  border: 2px solid gray;
+  padding: 10px;
+}
+#main.hover {
+  padding: 2px;
+  border: 10px dashed #333;
+}
 #container {
   display: none;
   border: 10px #ccc; 
-  width: 1000px; 
-  height: 400px; 
-  margin: 40px auto;
+  width: auto;
+  height: 400px;
 }
-
 #leftBar {
   text-align: center;
   background-color:#C0D9D9; 
@@ -29,7 +38,8 @@ body {
   float:left;
   border: 10px #ccc; 
   width: %20; 
-  max-height: 900px;
+  height: inherit;
+  overflow: auto;
   padding-right: 2px;
   margin: 20px auto;
 }
@@ -69,7 +79,7 @@ ul.top-level li {
   -ms-transition: font-size 0.3s ease, background-color 0.3s ease;
   transition: font-size 0.3s ease, background-color 0.3s ease;
 }
-#holder { 
+#dropbox { 
   background-color:#E8E8E8; 
   text-align: center;
   vertical-align: middle; 
@@ -80,19 +90,9 @@ ul.top-level li {
   height: 300px; 
   margin: 20px auto;
 }
-
-#holder.hover { 
+#dropbox.hover { 
   border: 10px dashed #333; 
-
-}
-#holder.drop { 
-  border: 10px dashed #333; 
-  width: 100px; 
-  height: 100px; 
-  float:left;
-  line-height: 100px;   
-  margin: 10px auto;
-}
+} 
 input.rounded {
     border: 1px solid #ccc;
     -moz-border-radius: 10px;
@@ -107,9 +107,7 @@ input.rounded {
     -webkit-appearance: none;
 }
 input.rounded:focus {
-
     border-color: #339933;
-
 }
 #docDisplay{padding: 20px;
 	background-color: #FFFFFF;
@@ -117,34 +115,36 @@ input.rounded:focus {
 	height: inherit;
 	overflow:auto;
 	line-height:2;
+	margin-bottom: 20px;
 	}
 #key{
-font-size: 14px;
-margin-top: 20px;
-float:right;
-border: 10px #000000; 
-border-style:solid;
-	line-height:1.5;
+    display: none;
+    font-size: 14px;
+    text-align:center;
+
+    background-color: white;
+    line-height:1.5;
+    padding: 10px;
 }
-.mentionStyle{font-size: 18px;
-	font-weight: bold;
-	opacity: 1;
-	cursor: pointer;
-	padding: 2px;
-	}	
+.mentionStyle{
+    font-size: 18px;
+    font-weight: bold;
+    opacity: 1;
+    cursor: pointer;
+    padding: 2px;
+}	
 .textStyle{font-size: 16px;}
 .inactive{opacity: 0.3;}
 .guessStyle {
-border: 1px solid black;
-padding: 1px;
+    border: 1px solid black;
+    padding: 1px;
 }
 .goldStyle {
-text-shadow: 0 0 10px;
+    text-shadow: 0 0 10px;
 }
 .selected {background-color: #EEEEEE;
-}
+	  }
 .incorrect {border-bottom: 2px solid red;}
-#key{padding: 20px;}
 .on.exterior{
-	opacity: 1;
+    opacity: 1;
 }
