@@ -148,3 +148,13 @@ input.rounded:focus {
 .on.exterior{
     opacity: 1;
 }
+
+#title_bar {
+
+  background-color: #EEEEEE;
+  padding: 2px;
+  line-height:2;
+  border-radius: 4px;
+  clear:  both;
+  text-align: center;
+}
