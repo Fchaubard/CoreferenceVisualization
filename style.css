@@ -121,12 +121,13 @@ input.rounded:focus {
 #docScores{
     font-size: 14px;
     text-align:left;
-    background-color: white;
     line-height:2;
     padding: 10px;
-    width: 80px;
+    width: 140px;
     height: inherit;
     float:left;
+
+    border: 2px solid gray;
 }
 #key{
     display: none;

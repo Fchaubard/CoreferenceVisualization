@@ -85,10 +85,10 @@ $('#sort_segment').toggles({
 
 $('#sort_segment').on('toggle', function (e, active) {
     if (active) {
-        jsonArray.sort(dynamicSort("MUC_F1"));
+        jsonArray=jsonArray.sort(dynamicSort("MUC_F1"));
 
     } else {
-        jsonArray.sort(dynamicSort("B3_F1"));
+        jsonArray=jsonArray.sort(dynamicSort("B3_F1"));
     }
     addBackAllDocs();
 });
@@ -143,7 +143,7 @@ main.ondrop = function (e) {
   reader.onload = function(e){
     try {
       jsonArray = JSON.parse(reader.result);
-      jsonArray.sort(dynamicSort("MUC_F1"));
+      jsonArray = jsonArray.sort(dynamicSort("MUC_F1"));
   	  //Empty the list
 	    while(ul.firstChild) {
 	     ul.removeChild( ul.firstChild );
@@ -164,6 +164,7 @@ main.ondrop = function (e) {
           ul.appendChild(li);
         }
       };
+
       ul.addEventListener("click",function(e) {
             // e.target is our targetted element.
             // try doing console.log(e.target.nodeName), it will result LI
@@ -178,7 +179,7 @@ main.ondrop = function (e) {
 		            $( "#"+e.target.id ).addClass("selected");
                 //var contentSpan = document.getElementById('contentSpan');
                 display(jsonArray[parseInt(docNumClicked)].content);
-                changeScoreBox(jsonArray[parseInt(docNumClicked)].score);
+                changeScoreBox(jsonArray[parseInt(docNumClicked)]);
                 //contentSpan.innerHTML = jsonArray[parseInt(docNumClicked)].content.string.join(" ");
             }
         });
@@ -187,7 +188,7 @@ main.ondrop = function (e) {
       //var contentSpan = document.getElementById('contentSpan');
       //contentSpan.innerHTML = jsonArray[0].content.string.join(" ");
       display(jsonArray[0].content);
-      changeScoreBox(jsonArray[0].score);
+      changeScoreBox(jsonArray[0]);
 
     }catch(e){
      console.error("Parsing error!!!:", e); 
@@ -226,11 +227,11 @@ function addBackAllDocs(){
       //contentSpan.innerHTML = jsonArray[0].content.string.join(" ");
       if(firstIndex>-1){
           display(jsonArray[firstIndex].content);
-          changeScoreBox(jsonArray[firstIndex].score);
+          changeScoreBox(jsonArray[firstIndex]);
       }
       else{
         display(jsonArray[0].content);
-        changeScoreBox(jsonArray[0].score);
+        changeScoreBox(jsonArray[0]);
       }
       
 }
@@ -264,7 +265,7 @@ function searchDoc(){
       //contentSpan.innerHTML = jsonArray[firstIndex].content.string.join(" ");
       if(firstIndex>-1){
           display(jsonArray[firstIndex].content);
-          changeScoreBox(jsonArray[firstIndex].score);
+          changeScoreBox(jsonArray[firstIndex]);
       }
       else{
         $( "#docDisplay" ).text("");
@@ -292,9 +293,6 @@ function checkForEmptyInput(){
    }
 }
 
-
-
-
 function dynamicSort(property) {
     var sortOrder = 1;
     if(property[0] === "-") {
@@ -302,7 +300,7 @@ function dynamicSort(property) {
         property = property.substr(1);
     }
     return function (a,b) {
-        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+        var result = (a[property] < b[property]) ? -1 : (a[property]> b[property]) ? 1 : 0;
         return result * sortOrder;
     }
 }
