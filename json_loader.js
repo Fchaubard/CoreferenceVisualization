@@ -119,6 +119,8 @@ main.ondrop = function (e) {
   //enable container
   $( "#container" ).show();
   $( "#key" ).show();
+  $( "#key" ).show();
+
   //hide dropbox
   $( "#dropbox" ).hide();
     
@@ -307,8 +309,10 @@ function dynamicSort(property) {
 
 
 function changeScoreBox(score){
-  var string = "Score: MUC_R="+score.MUC_R+" MUC_P="+score.MUC_P+" MUC_F1="+score.MUC_F1+" B3_R="+score.B3_R+" B3_P="+score.B3_P+" B3_F1="+score.B3_F1;
-  $( "#docScores" ).text(string);
+  var string = "<br/><b>MUC_P: </b>"+score.MUC_P+" <br/><b>MUC_R: </b>"+score.MUC_R+" <br/><b>MUC_F1: </b>"+score.MUC_F1+" <br/><b>B3_P: </b>"+score.B3_P+" <br/><b>B3_R: </b>"+score.B3_R+" <br/><b>B3_F1: </b>"+score.B3_F1;
+
+  $( "#docScores" ).text("");
+  $( "#docScores" ).append($(document.createElement('span')).append(string).append(" "));
 
 }
 
