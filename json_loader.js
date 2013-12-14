@@ -5,6 +5,7 @@ var thejsonfile = document.getElementById('thejsonfile');
 var state = document.getElementById('status');
 var docList = document.getElementById('doclist');
 var thejsonobject;
+var showOnlyTest = true; //if false then show only train
 
 var stateStr = 'Drag JSON output file here';
 var dropStr = 'Drop JSON file!';
@@ -22,6 +23,78 @@ dropbox.ondragleave = function (){ this.className = 'nohover'; state.innerHTML =
 container.ondragover = function() {main.className = 'hover'; return false; };
 container.ondragleave = function() {main.className = 'nohover'; return false; };
 
+
+//create and add toggle button for train and test
+var toggleDiv = document.createElement("div");
+toggleDiv.setAttribute('id','train_test_toggle');
+toggleDiv.setAttribute('class','toggle-modern');
+document.getElementById('leftBar').appendChild(toggleDiv);
+$('#train_test_toggle').toggles({
+    drag: true, // can the toggle be dragged
+    click: true, // can it be clicked to toggle
+    text: {
+      on: 'Test Docs Only', // text for the ON position
+      off: 'Train Docs Only' // and off
+    },
+    on: true, // is the toggle ON on init
+    animate: 250, // animation time
+    transition: 'ease-in-out', // animation transition,
+    checkbox: null, // the checkbox to toggle (for use in forms)
+    clicker: null, // element that can be clicked on to toggle. removes binding from the toggle itself (use nesting)
+    width: 150, // width used if not set in css
+    height: 20, // height if not set in css
+
+    type: 'compact' // if this is set to 'select' then the select style toggle will be used
+  });
+
+$('#train_test_toggle').on('toggle', function (e, active) {
+    if (active) {
+        showOnlyTest=true;
+
+    } else {
+        showOnlyTest=false;
+    }
+    addBackAllDocs();
+});
+
+
+
+
+// Create the segment for the sorting 
+var toggleDiv = document.createElement("div");
+toggleDiv.setAttribute('id','sort_segment');
+toggleDiv.setAttribute('class','toggle-modern');
+document.getElementById('leftBar').appendChild(toggleDiv);
+$('#sort_segment').toggles({
+    drag: true, // can the toggle be dragged
+    click: true, // can it be clicked to toggle
+    text: {
+      on: 'MUC F1', // text for the ON position
+      off: 'B3 F1' // and off
+    },
+    on: true, // is the toggle ON on init
+    animate: 250, // animation time
+    transition: 'ease-in-out', // animation transition,
+    checkbox: null, // the checkbox to toggle (for use in forms)
+    clicker: null, // element that can be clicked on to toggle. removes binding from the toggle itself (use nesting)
+    width: 150, // width used if not set in css
+    height: 20, // height if not set in css
+
+    type: 'compact' // if this is set to 'select' then the select style toggle will be used
+  });
+
+$('#sort_segment').on('toggle', function (e, active) {
+    if (active) {
+        jsonArray.sort(dynamicSort("MUC_F1"));
+
+    } else {
+        jsonArray.sort(dynamicSort("B3_F1"));
+    }
+    addBackAllDocs();
+});
+
+
+
 //Create search box
 var mi = document.createElement("input");
 mi.setAttribute('type', 'text');
@@ -31,6 +104,10 @@ mi.setAttribute('onkeyup','searchDoc()');
 mi.setAttribute('className','rounded');
 mi.setAttribute('id','searchBox');
 document.getElementById('leftBar').appendChild(mi);
+
+
+
+
 
 //Create doc list
 var ul = document.createElement("ul");
@@ -64,21 +141,26 @@ main.ondrop = function (e) {
   reader.onload = function(e){
     try {
       jsonArray = JSON.parse(reader.result);
-	//Empty the list
-	while(ul.firstChild) {
-	    ul.removeChild( ul.firstChild );
-	}
-	//Clear the doc display
+      jsonArray.sort(dynamicSort("MUC_F1"));
+  	  //Empty the list
+	    while(ul.firstChild) {
+	     ul.removeChild( ul.firstChild );
+	    }
+	    //Clear the doc display
       $( "#docDisplay" ).text("");
+      $( "#docScores" ).text("");
       
       for (var i =0  ; i < jsonArray.length; i++) {
         var doc = jsonArray[i];
-        var li = document.createElement("li");
-        li.setAttribute("id", "li_"+i);
-	//Flag element as docitem
-	li.className = "docItem";
-	li.innerHTML=doc.id;
-        ul.appendChild(li);
+        if((showOnlyTest && doc.type=='test')||(!showOnlyTest && doc.type=='train') ){
+          var li = document.createElement("li");
+          li.setAttribute("id", "li_"+i);
+  	      //Flag element as docitem
+  	      li.className = "docItem";
+  	      li.innerHTML=doc.id;
+
+          ul.appendChild(li);
+        }
       };
       ul.addEventListener("click",function(e) {
             // e.target is our targetted element.
@@ -89,11 +171,12 @@ main.ondrop = function (e) {
                 console.log(e.target.id + " was clicked");
                 var re = /li_/gi;
                 var docNumClicked = e.target.id.replace(re, "");
-		//unselect all docitems
-		$( ".docItem" ).removeClass("selected");
-		$( "#"+e.target.id ).addClass("selected");
+		            //unselect all docitems
+		            $( ".docItem" ).removeClass("selected");
+		            $( "#"+e.target.id ).addClass("selected");
                 //var contentSpan = document.getElementById('contentSpan');
                 display(jsonArray[parseInt(docNumClicked)].content);
+                changeScoreBox(jsonArray[parseInt(docNumClicked)].score);
                 //contentSpan.innerHTML = jsonArray[parseInt(docNumClicked)].content.string.join(" ");
             }
         });
@@ -102,6 +185,7 @@ main.ondrop = function (e) {
       //var contentSpan = document.getElementById('contentSpan');
       //contentSpan.innerHTML = jsonArray[0].content.string.join(" ");
       display(jsonArray[0].content);
+      changeScoreBox(jsonArray[0].score);
 
     }catch(e){
      console.error("Parsing error!!!:", e); 
@@ -116,27 +200,37 @@ main.ondrop = function (e) {
 function addBackAllDocs(){
 
   document.getElementById('doclist').innerHTML='';
+  var firstIndex=-1;
   for (var i =0  ; i < jsonArray.length; i++) {
         
         var doc = jsonArray[i];
-        //var ul = document.getElementById('doclist');
 
-        var li = document.createElement("li");
-        li.setAttribute("id", "li_"+i);
-        //li.innerHTML= "<span>"+doc.id+"</span>";
-        li.innerHTML=doc.id;
+        if((showOnlyTest && doc.type=='test')||(!showOnlyTest && doc.type=='train') ){
+          //var ul = document.getElementById('doclist');
+           if (firstIndex==-1){
+            firstIndex=i;
+          }
+          var li = document.createElement("li");
+          li.setAttribute("id", "li_"+i);
+          //li.innerHTML= "<span>"+doc.id+"</span>";
+          li.innerHTML=doc.id;
 
-        
+          document.getElementById('doclist').appendChild(li);
 
-        document.getElementById('doclist').appendChild(li);
-
-        
+        }
         //$('#doclist').append('<li>Document: '+ doc.id +'</li>');
       };
       //var contentSpan = document.getElementById('contentSpan');
       //contentSpan.innerHTML = jsonArray[0].content.string.join(" ");
-    
-      display(jsonArray[0].content);
+      if(firstIndex>-1){
+          display(jsonArray[firstIndex].content);
+          changeScoreBox(jsonArray[firstIndex].score);
+      }
+      else{
+        display(jsonArray[0].content);
+        changeScoreBox(jsonArray[0].score);
+      }
+      
 }
 
 
@@ -149,14 +243,18 @@ function searchDoc(){
         var doc = jsonArray[i];
         //var ul = document.getElementById('doclist');
         if ((doc.id.toLowerCase().indexOf(query) !== -1)||(doc.content.string.join(" ").toLowerCase().indexOf(query) !== -1)){
-          if (firstIndex==-1){
-            firstIndex=i;
+          
+
+          if((showOnlyTest && doc.type=='test')||(!showOnlyTest && doc.type=='train') ){
+            if (firstIndex==-1){
+              firstIndex=i;
+            }
+            var li = document.createElement("li");
+            li.setAttribute("id", "li_"+i);
+            //li.innerHTML= "<span>"+doc.id+"</span>";
+            li.innerHTML=doc.id;
+            document.getElementById('doclist').appendChild(li);
           }
-          var li = document.createElement("li");
-          li.setAttribute("id", "li_"+i);
-          //li.innerHTML= "<span>"+doc.id+"</span>";
-          li.innerHTML=doc.id;
-          document.getElementById('doclist').appendChild(li);
         }
         //$('#doclist').append('<li>Document: '+ doc.id +'</li>');
       };
@@ -164,9 +262,11 @@ function searchDoc(){
       //contentSpan.innerHTML = jsonArray[firstIndex].content.string.join(" ");
       if(firstIndex>-1){
           display(jsonArray[firstIndex].content);
+          changeScoreBox(jsonArray[firstIndex].score);
       }
       else{
         $( "#docDisplay" ).text("");
+        $( "#docScores" ).text("");
       }
   //alert(document.getElementById('searchBox').value);
 }
@@ -189,5 +289,28 @@ function checkForEmptyInput(){
     searchDoc();
    }
 }
+
+
+
+
+function dynamicSort(property) {
+    var sortOrder = 1;
+    if(property[0] === "-") {
+        sortOrder = -1;
+        property = property.substr(1);
+    }
+    return function (a,b) {
+        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+        return result * sortOrder;
+    }
+}
+
+
+function changeScoreBox(score){
+  var string = "Score: MUC_R="+score.MUC_R+" MUC_P="+score.MUC_P+" MUC_F1="+score.MUC_F1+" B3_R="+score.B3_R+" B3_P="+score.B3_P+" B3_F1="+score.B3_F1;
+  $( "#docScores" ).text(string);
+
+}
+
 
 

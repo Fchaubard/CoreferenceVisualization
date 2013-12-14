@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=620">
 <title>CS224N Coreference Visualizer</title>
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<!--<script src="https://rawgithub.com/simontabor/jquery-toggles/master/toggles.min.js"></script>-->
+<script src="./jquery-toggles-master/toggles.js"></script>
+
+<link rel="stylesheet" type="text/css" href="./jquery-toggles-master/themes/toggles-dark.css">
+<link rel="stylesheet" type="text/css" href="./jquery-toggles-master/themes/toggles-iphone.css">
+<link rel="stylesheet" type="text/css" href="./jquery-toggles-master/themes/toggles-light.css">
+<link rel="stylesheet" type="text/css" href="./jquery-toggles-master/themes/toggles-modern.css">
+<link rel="stylesheet" type="text/css" href="./jquery-toggles-master/themes/toggles-soft.css">
+<link rel="stylesheet" type="text/css" href="./jquery-toggles-master/toggles.css">
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
@@ -13,21 +22,33 @@
   <div id="title_bar">  
     <h1>Colin and Francois' Coreference Visualization System</h1>  
     <span><a href="http://www.busbookie.com/coref/CS224n Final Paper.pdf">Paper</a></span>
-    </div>
+  </div>
+
+<!--<div class="examples toggle-modern"><div  class="toggle"></div></div>
+<div class="examples toggle-soft"><div  class="toggle"></div></div>
+<div class="examples toggle-dark"><div  class="toggle"></div></div>-->
+  
   <div id="main">
     
     <div id="container">    
-      <div id="leftBar"></div>
-      <div id="docDisplay"></div> 
+      <div id="leftBar">
+
+      </div>
+
+        <div id="docDisplay"></div> 
+        <div>
+          <span id="docScore">
+          </span>
+        </div>
       <div id="key">
-	<span id="key1">
-	  Select a <span class="guessStyle"><b>mention</b></span> to see its co-referent clusters.</br>
-	  Incorrectly clustered <span class="incorrect"><b>mentions</b></span> are underlined.</br>
-	</span>
-	<span id="key2">
-	  <span style="color:blue" class="goldStyle"><b>Mentions</b></span> in the gold cluster have the same <span style="color:blue" class="goldStyle"><b>color/background</b></span>.</br>
-	  <span class="guessStyle" style="color:blue"><b>Mentions</b></span> in the guess cluster are <span class="guessStyle" style="color:red"><b>bordered</b></span>.</br>
-	</span>
+        <span id="key1">
+      	  Select a <span class="guessStyle"><b>mention</b></span> to see its co-referent clusters.</br>
+      	  Incorrectly clustered <span class="incorrect"><b>mentions</b></span> are underlined.</br>
+      	</span>
+      	<span id="key2">
+      	  <span style="color:blue" class="goldStyle"><b>Mentions</b></span> in the gold cluster have the same <span style="color:blue" class="goldStyle"><b>color/background</b></span>.</br>
+      	  <span class="guessStyle" style="color:blue"><b>Mentions</b></span> in the guess cluster are <span class="guessStyle" style="color:red"><b>bordered</b></span>.</br>
+      	</span>
       </div>
     </div>
     <div id="dropbox"><span id="status">Feed me JSON file!</span></div>

@@ -1,0 +1,47 @@
+.toggle-slide {
+  overflow: hidden;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  direction: ltr;
+}
+.toggle-slide .toggle-on,.toggle-slide .toggle-off,.toggle-slide .toggle-blob {
+  float: left;
+}
+.toggle-slide .toggle-blob {
+  position: relative;
+  z-index: 99;
+  cursor: hand;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.downloads {
+  width: 200px;
+  margin: 0 auto;
+}
+.downloads a {
+  font-size: 0.3em;
+  display: block;
+  text-decoration: none;
+}
+.downloads a span {
+  font-size: 0.4em;
+}
+.downloads .min {
+  margin: 0.4em 0 0.2em;
+  border: 1px solid #549974;
+  padding: 0.3em;
+  font-size: 0.6em;
+}
+.downloads .min:hover {
+  background: #E7F7EE;
+}
+.downloads .min:active {
+  background: white;
+}
